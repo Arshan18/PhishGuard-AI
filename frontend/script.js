@@ -185,29 +185,141 @@ function initEmailScanner() {
     }
   });
 
+  // ==========================================
+  // Sample Email Collections & Random Selector
+  // ==========================================
+  const PHISHING_SAMPLES = [
+    {
+      subject: 'URGENT: Your Account Has Been Suspended!',
+      content: 'Dear Customer,\n\nWe detected unauthorized login attempts on your banking account. Your access is currently frozen. Please click the secure link below to verify your identity and restore access within 24 hours:\n\nhttp://security-verify-bank-update.xyz/login\n\nFailure to do so will result in permanent suspension.\n\nSecurity Department'
+    },
+    {
+      subject: 'Delivery Exception: Package #USPS-98412 On Hold',
+      content: 'Your parcel could not be delivered due to an incorrect street address and an outstanding unpaid customs fee of $2.49. Please confirm your delivery address and pay the fee at the following link to reschedule delivery:\n\nhttp://postal-tracking-reschedule.xyz/parcel?id=98412\n\nPackages not claimed within 48 hours will be returned to the sender.'
+    },
+    {
+      subject: 'URGENT: Overdue Invoice #INV-88912 - Final Notice',
+      content: 'Dear Accounting Department,\n\nOur records show invoice #INV-88912 for $4,850.00 is now 15 days overdue. Please review the attached remittance instructions and wire the balance immediately to avoid legal collection procedures:\n\nhttp://corporate-billing-invoice-portal.xyz/pay/88912\n\nRegards,\nGlobal Supplier Billing Team'
+    },
+    {
+      subject: 'CONGRATULATIONS: You Won a $1,000 Walmart Gift Card!',
+      content: 'Congratulations! Your email address was selected as the 1st prize winner in our annual customer loyalty rewards program. Claim your $1,000 gift card reward now before it expires in 6 hours:\n\nhttp://rewards-giftcard-claims.xyz/redeem?user=winner\n\nEnter your shipping address and contact number to receive your instant payout voucher.'
+    },
+    {
+      subject: 'Action Required: Your Office365 Password Expires Today',
+      content: 'Attention Employee,\n\nYour corporate Microsoft Office365 password will expire in 2 hours. To keep your current password and prevent email account lock-out, click the validation portal below to synchronize your credentials:\n\nhttp://sso-portal-auth-microsoft.xyz/login\n\nInternal IT Support Helpdesk'
+    },
+    {
+      subject: 'Exclusive Investment: Earn 350% Weekly Returns with AI Trading',
+      content: 'Dear Investor,\n\nOur automated cryptocurrency trading algorithm guarantees a 350% return on investment every week with zero risk. Deposit a minimum of 0.05 BTC today to start generating automated passive income:\n\nhttp://instant-crypto-yield-matrix.xyz/signup\n\nLimited spots available for early access investors.'
+    },
+    {
+      subject: 'HR Notice: Update Direct Deposit Details for Next Payroll',
+      content: 'All Staff,\n\nDue to our annual banking system migration, all employees must verify and re-enter their direct deposit routing details before Friday to avoid payroll delays:\n\nhttp://employee-portal-hr-payroll.xyz/direct-deposit\n\nThank you for your prompt cooperation.\nHuman Resources Dept'
+    },
+    {
+      subject: 'Critical Alert: Cloud Storage Full - Incoming Emails Blocked',
+      content: 'Your cloud storage mailbox has reached 99.8% capacity. Incoming emails are currently being held and will be permanently bounced within 24 hours. Click below to upgrade your quota and release pending messages:\n\nhttp://cloud-mailbox-storage-upgrade.xyz/verify\n\nMailbox Admin Team'
+    },
+    {
+      subject: 'Notice of Tax Refund Status: $842.50 Pending Approval',
+      content: 'Dear Taxpayer,\n\nAfter recalculating your recent annual tax assessment, our revenue service identified an overpayment of $842.50 in your favor. Submit your refund claim form and banking details online to receive direct deposit:\n\nhttp://tax-refund-claim-portal.xyz/process\n\nRevenue Service Department'
+    },
+    {
+      subject: 'Copyright Infringement Notice - Account Scheduled for Deletion',
+      content: 'We received multiple copyright infringement reports regarding media posted on your profile. If you believe this is an error, submit an appeal within 12 hours or your account will be permanently deactivated:\n\nhttp://social-account-appeal-center.xyz/appeal\n\nSecurity and Compliance Center'
+    }
+  ];
+
+  const LEGITIMATE_SAMPLES = [
+    {
+      subject: 'Project Review Meeting - Agenda for Thursday',
+      content: 'Hi Team,\n\nPlease find attached the agenda for our sprint review on Thursday at 2:00 PM. We will go over the feature milestones, code reviews, and test coverage metrics.\n\nLet me know if you would like to add any discussion points.\n\nBest regards,\nAlex'
+    },
+    {
+      subject: 'Order Confirmation #408-92183 - Thank you for your purchase',
+      content: 'Hi Sarah,\n\nThanks for shopping with us! We have received your order #408-92183 for the Ergonomic Wireless Mouse. We are currently processing your package and will send a tracking link as soon as it ships.\n\nYou can view your order summary in your account dashboard anytime.\n\nCustomer Care Team'
+    },
+    {
+      subject: 'Appointment Reminder: Routine Dental Checkup on Monday',
+      content: 'Dear Michael,\n\nThis is a friendly reminder of your upcoming dental cleaning and checkup appointment scheduled for Monday, October 12th at 10:30 AM with Dr. Patterson.\n\nIf you need to reschedule, please call our office at least 24 hours in advance.\n\nBest regards,\nOakridge Dental Clinic'
+    },
+    {
+      subject: 'Weekly Project Status: Milestone 3 Completed Ahead of Schedule',
+      content: 'Hi everyone,\n\nI am pleased to share that Milestone 3 for the client portal redesign has been completed and passed QA testing today. The staging deployment is scheduled for Tuesday morning.\n\nPlease review the attached release notes when you have a moment.\n\nThanks,\nDavid Clark\nEngineering Lead'
+    },
+    {
+      subject: 'Upcoming Public Holiday Office Closure Schedule',
+      content: 'Dear Colleagues,\n\nPlease note that our offices will be closed on Monday in observance of the upcoming public holiday. Normal business operations and customer support services will resume on Tuesday at 8:30 AM.\n\nHave a safe and restful long weekend!\n\nHuman Resources'
+    },
+    {
+      subject: 'Support Ticket #78219 - Issue Resolved: VPN Access Configured',
+      content: 'Hello Kevin,\n\nYour support ticket regarding the VPN certificate renewal has been resolved. The updated configuration profile has been applied to your workstation.\n\nPlease test your remote login and reply to this thread if you experience any further connection issues.\n\nBest,\nIT Helpdesk Support'
+    },
+    {
+      subject: 'CS 401: Lecture Notes & Assignment 2 Submission Deadline',
+      content: 'Dear Students,\n\nThe slides from yesterday\'s lecture on Distributed Systems and the grading rubric for Assignment 2 are now posted on the course portal. The assignment is due next Friday at 11:59 PM.\n\nOffice hours will be held on Wednesday from 3:00 PM to 5:00 PM in Room 410.\n\nProf. Williams'
+    },
+    {
+      subject: 'Flight Booking Confirmation: SFO to JFK - Booking Reference #KL982Q',
+      content: 'Dear Passenger,\n\nYour flight reservation is confirmed. Flight AA-240 departs San Francisco (SFO) on Friday, Nov 14 at 8:15 AM and arrives at New York (JFK) at 4:45 PM. Seat assignment: 14B (Window).\n\nOnline check-in opens 24 hours prior to departure.\n\nSafe travels,\nAirline Reservations'
+    },
+    {
+      subject: 'Draft Q4 Budget Estimates - Please Review by Wednesday',
+      content: 'Hi Maria,\n\nI have drafted the departmental budget estimates for Q4 taking into account our revised software tooling and cloud infrastructure expenses. The spreadsheet is available on our shared team drive.\n\nPlease review the line items and send over any adjustments before our Wednesday finance call.\n\nThanks,\nRobert'
+    },
+    {
+      subject: 'Invitation: Technical Workshop on Container Security Best Practices',
+      content: 'Hi everyone,\n\nYou are invited to attend our upcoming internal engineering workshop on container hardening and vulnerability scanning. The session will take place on Thursday at 4:00 PM via Google Meet.\n\nA calendar invite with the meeting link has been sent to your inbox.\n\nBest regards,\nDevOps Team'
+    }
+  ];
+
+  let lastPhishIndex = -1;
+  let lastSafeIndex = -1;
+
+  function getRandomSample(collection, lastIndex) {
+    if (!collection || collection.length === 0) return null;
+    if (collection.length === 1) return { sample: collection[0], index: 0 };
+    let newIndex;
+    do {
+      newIndex = Math.floor(Math.random() * collection.length);
+    } while (newIndex === lastIndex);
+    return { sample: collection[newIndex], index: newIndex };
+  }
+
   // Sample Loader Buttons for Demonstration
   const samplePhishBtn = document.getElementById('samplePhishBtn');
   const sampleSafeBtn = document.getElementById('sampleSafeBtn');
 
   if (samplePhishBtn) {
     samplePhishBtn.addEventListener('click', () => {
-      if (subjectInput) subjectInput.value = 'URGENT: Your Account Has Been Suspended!';
-      if (contentInput) {
-        contentInput.value = 'Dear Customer,\n\nWe detected unauthorized login attempts on your banking account. Your access is currently frozen. Please click the secure link below to verify your identity and restore access within 24 hours:\n\nhttp://security-verify-bank-update.xyz/login\n\nFailure to do so will result in permanent suspension.\n\nSecurity Department';
-        contentInput.dispatchEvent(new Event('input'));
+      const selected = getRandomSample(PHISHING_SAMPLES, lastPhishIndex);
+      if (selected) {
+        lastPhishIndex = selected.index;
+        if (subjectInput) subjectInput.value = selected.sample.subject;
+        if (contentInput) {
+          contentInput.value = selected.sample.content;
+          contentInput.dispatchEvent(new Event('input'));
+        }
+        hideAlert();
+        hideResults();
       }
-      hideAlert();
     });
   }
 
   if (sampleSafeBtn) {
     sampleSafeBtn.addEventListener('click', () => {
-      if (subjectInput) subjectInput.value = 'Project Review Meeting - Agenda for Thursday';
-      if (contentInput) {
-        contentInput.value = 'Hi Team,\n\nPlease find attached the agenda for our sprint review on Thursday at 2:00 PM. We will go over the feature milestones, code reviews, and test coverage metrics.\n\nLet me know if you would like to add any discussion points.\n\nBest regards,\nAlex';
-        contentInput.dispatchEvent(new Event('input'));
+      const selected = getRandomSample(LEGITIMATE_SAMPLES, lastSafeIndex);
+      if (selected) {
+        lastSafeIndex = selected.index;
+        if (subjectInput) subjectInput.value = selected.sample.subject;
+        if (contentInput) {
+          contentInput.value = selected.sample.content;
+          contentInput.dispatchEvent(new Event('input'));
+        }
+        hideAlert();
+        hideResults();
       }
-      hideAlert();
     });
   }
 
@@ -233,6 +345,7 @@ function initEmailScanner() {
   function hideResults() {
     if (resultContainer) {
       resultContainer.style.display = 'none';
+      resultContainer.innerHTML = '';
     }
   }
 
@@ -496,6 +609,7 @@ function initUrlScanner() {
   function hideResults() {
     if (resultContainer) {
       resultContainer.style.display = 'none';
+      resultContainer.innerHTML = '';
     }
   }
 

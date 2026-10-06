@@ -1,58 +1,53 @@
-# Project Development Rules
+# Project Development Rules & Standards — PhishGuard AI
 
-This document outlines the architectural, engineering, and ethical development guidelines for the **AI-Based Phishing Email & Malicious URL Detection** project.
-
----
-
-## 1. General Engineering Rules
-
-* **Keep It Simple:** Maintain a lightweight, subject-level project footprint. Avoid enterprise architectural complexity (e.g., microservices, orchestrators, heavy state stores).
-* **Technology Discipline:** Do not introduce unrequested frameworks, complex ORMs, or container tools unless explicitly required.
-* **Preserve Working Code:** Do not delete, break, or arbitrarily refactor working components without a clearly justified requirement.
-* **Dataset Integrity:** Never overwrite or corrupt existing raw datasets in the `datasets/` folder.
-* **No Fabricated Results:** Never fake or hardcode machine learning prediction scores or performance metrics.
+This document establishes the development, machine learning, architectural, and documentation guidelines for **PhishGuard AI**.
 
 ---
 
-## 2. Machine Learning Rules
+## 1. Code Quality & Engineering Discipline
 
-* **Model-Driven Inference:** All predictions presented in the UI must originate from trained model artifacts, not heuristic mocks or hardcoded output mappings.
-* **No Hardcoded Accuracy Claims:** Never claim specific accuracy, precision, or recall figures unless verified against an actual validation dataset.
-* **Preprocessing Parity:** Ensure text tokenization, TF-IDF feature vocabulary, and scaling used during inference exactly mirror training-time preprocessing.
-* **Preserve Feature Order:** For tabular and structural URL models, strictly preserve the exact column ordering and encoding format used during model training.
-* **Transparent Limitations:** Clearly articulate the distinction between pre-engineered tabular URL features and raw URL string processing.
-
----
-
-## 3. Dataset Rules
-
-* **Storage Location:** All raw datasets must reside in the `datasets/` directory.
-* **Immutability:** Treat raw data as read-only. Cleaned or preprocessed variations should be stored separately if needed.
-* **Label Verification:** Thoroughly inspect label representations (e.g., `1` vs. `-1` vs. `0`) and document mappings prior to fitting classifiers.
-* **Document Provenance:** Maintain clear records of dataset sources (e.g., UCI Machine Learning Repository).
+* **Keep It Lightweight:** Maintain an accessible, subject-level project footprint. Avoid unnecessary enterprise dependencies, distributed queues, or heavy containerization.
+* **Component Preservation:** Preserve existing working HTML, CSS, JavaScript, Flask endpoints, and ML models. Do not perform arbitrary rewrites without clear justification.
+* **Safe Analysis Guarantee:** Target URLs and email text must always be inspected as static strings. Never execute, navigate to, or resolve suspicious URLs.
+* **Zero Fabricated Data:** Never hardcode prediction outputs, fake confidence percentages, or simulate machine learning predictions in the frontend. All verdicts must originate from model inference.
 
 ---
 
-## 4. Frontend Rules
+## 2. Machine Learning & Inference Standards
 
-* **Cybersecurity Design Consistency:** Maintain the established dark navy palette, cyan/blue highlights, and card layouts defined in `frontend/style.css`.
-* **Full Responsiveness:** Ensure all interactive pages render cleanly on mobile, tablet, and desktop viewports.
-* **Scope Discipline:** Do not introduce unrequested pages (e.g., user profiles, admin consoles, billing views, authentication gates).
-* **Safe Inspection:** Never automatically visit, redirect to, or execute user-entered target URLs.
-
----
-
-## 5. Backend Rules
-
-* **Simplicity First:** Keep the Flask API minimal, readable, and focused solely on serving the application and performing inference.
-* **Strict Input Validation:** Validate payloads on every endpoint; return clear HTTP 400 status codes with descriptive error messages when required fields are missing.
-* **Graceful Exception Handling:** Wrap inference routines in structured try/except blocks to prevent unhandled 500 server crashes.
-* **Information Security:** Do not expose sensitive internal server stack traces or directory paths in client-facing API responses.
+* **Pipeline Parity:** Ensure text vectorization, n-gram parameters, vocabulary bounds, and classification hyperparameters match between training notebooks and runtime Flask inference.
+* **Verified Class Mappings:** Never assume a fixed class index (e.g., assuming index 1 is always phishing). Always inspect `model.classes_` dynamically to map labels (`0: Legitimate`, `1: Phishing`).
+* **Probabilistic Integrity:** Return exact floating-point probabilities from `predict_proba()` without arbitrary clamping, rounding distortion, or synthetic scaling.
+* **Explainability Boundaries:** Clearly distinguish rule-based summaries conditioned on model output from post-hoc explainability frameworks (e.g., LIME or SHAP).
 
 ---
 
-## 6. Documentation Rules
+## 3. Dataset & Model Artifact Rules
 
-* **Ground Truth Alignment:** Keep all documentation files strictly synchronized with the actual codebase state.
-* **Honest Status Tracking:** Never describe a planned or partially completed component as fully operational.
-* **Explicit Status Labels:** Clearly mark unbuilt features with labels such as `[Planned]` or `[Not yet implemented]`.
+* **Read-Only Datasets:** Raw data in `datasets/` (`phishing_email.csv`, `Training Dataset.arff`) must remain immutable.
+* **Safe Serialization:** Export and store all scikit-learn model pipelines in `models/` using `joblib` with descriptive filenames.
+* **Feature Ordering:** For tabular feature models, strictly preserve column ordering and categorical encoding across training and runtime inference.
+
+---
+
+## 4. Frontend & UX Standards
+
+* **Design Consistency:** Adhere strictly to the dark charcoal (`#080D10`) and teal (`#20C8C3`) palette, typography, and card tokens defined in `frontend/style.css`.
+* **Motion & Performance:** Use hardware-accelerated CSS properties (`transform`, `opacity`) for smooth 60fps animations.
+* **Accessibility:** Always maintain a functional `@media (prefers-reduced-motion: reduce)` block to support users who prefer minimal motion.
+* **State Cleanliness:** When initiating a new scan or clearing inputs, immediately reset previous result containers (`innerHTML = ''`) and alerts to avoid stale UI state.
+
+---
+
+## 5. Backend & API Rules
+
+* **Strict Input Validation:** Validate payloads on every endpoint; return descriptive HTTP 400 status codes for missing or empty input fields.
+* **Structured Error Responses:** Wrap model inference in try/except blocks to return standardized JSON error objects instead of unhandled 500 server crashes.
+* **CORS Compliance:** Ensure CORS headers are enabled to allow smooth local testing and frontend-backend decoupling.
+
+---
+
+## 6. Documentation Standards
+
+* **Ground Truth Parity:** Keep all `.md` files strictly aligned with the current implementation state.
+* **Honest Status Tracking:** Never document a planned or pending feature as completed. Mark incomplete features explicitly as `[In Progress]` or `[Planned]`.

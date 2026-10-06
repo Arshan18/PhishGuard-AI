@@ -1,55 +1,64 @@
-# Project Memory & Context
+# Project Memory & Implementation Context — PhishGuard AI
 
-## 1. Project Identity
+## 1. Project Overview & Identity
 
-* **Project Title:** AI-Based Phishing Email & Malicious URL Detection Using Explainable Machine Learning
+* **Project Title:** AI-Based Phishing Email and Malicious URL Detection Using Explainable Machine Learning
 * **Application Name:** PhishGuard AI
-* **Scope & Level:** Undergraduate Subject-Level IT Engineering Academic Project
-* **Core Purpose:** To provide a clean, educational, and functional security tool that detects phishing emails and malicious links using transparent machine learning workflows.
+* **Scope:** Final-Year Undergraduate Subject-Level IT Engineering Academic Project
+* **Core Goal:** Deliver an interactive, educational, and explainable threat assessment platform utilizing transparent machine learning workflows.
 
 ---
 
-## 2. Technology Stack
+## 2. Technology Stack & Environment
 
-* **Language:** Python 3 (Backend & ML)
-* **ML & Data Libraries:** `scikit-learn`, `pandas`, `numpy`, `joblib`
-* **Development Environments:** Jupyter Notebook / Google Colab (for model training)
-* **Backend Framework:** Flask, `flask-cors`
-* **Frontend Technologies:** HTML5, Vanilla CSS3 (Custom Design System), JavaScript (ES6+), Bootstrap 5 (CDN), Bootstrap Icons
-
----
-
-## 3. Machine Learning Models
-
-* **Email Detection:** TF-IDF Vectorizer + Logistic Regression Classifier (`LogisticRegression`)
-* **URL Detection:** Structural/Lexical Feature Vector + Random Forest Classifier (`RandomForestClassifier`)
+* **Language:** Python 3 (Flask Backend & ML Inference), JavaScript ES6+ (Frontend Controller)
+* **Backend Framework:** Flask 3.x with CORS support (`flask_cors`)
+* **ML & Numerical Libraries:** `scikit-learn`, `numpy`, `joblib`
+* **Frontend:** HTML5, Vanilla CSS3 (Custom Design System & Motion Framework), Bootstrap 5 (CDN), Bootstrap Icons
+* **Supported Platforms:** Windows, macOS, Linux (Cross-platform)
 
 ---
 
-## 4. Datasets
+## 3. Machine Learning Architecture Decisions
 
-* **Email Dataset:** `datasets/phishing_email.csv` (Raw email text entries with binary phishing/legitimate labels).
-* **URL Dataset:** `datasets/Training Dataset.arff` (UCI Phishing Websites dataset containing 30 pre-engineered structural and lexical domain attributes).
-  * *Context Note:* The URL dataset consists of tabular engineered features; raw URL string processing requires explicit feature extraction to map inputs into this feature space.
+### 3.1. Email Classification Pipeline
+* **Artifact:** `models/email_phishing_model.joblib` (Loaded automatically on Flask startup).
+* **Pipeline Structure:**
+  1. `TfidfVectorizer(max_features=30000, ngram_range=(1, 2), sublinear_tf=True)`
+  2. `LogisticRegression(class_weight='balanced', max_iter=1000, random_state=42)`
+* **Class Mapping:** Verified from `classes_` array:
+  * `0`: Legitimate
+  * `1`: Phishing / Spam
+* **Probability Metrics Decision:**
+  * **Phishing Risk ($P(\text{Phishing})$):** The single probability score displayed in the user interface. It represents the probability belonging strictly to class 1.
+  * **Model Confidence ($P(\text{Predicted})$):** Computed internally and returned in API responses for auditing, but the UI is focused cleanly on Phishing Risk to prevent user confusion.
+
+### 3.2. URL Classification Pipeline
+* **Dataset:** `datasets/Training Dataset.arff` (UCI Phishing Websites repository with 30 pre-engineered structural and lexical domain attributes).
+* **Status:** The frontend UI is complete with client validation and sample loaders. The live inference hook in Flask is scheduled for subsequent deployment alongside the raw URL feature extraction layer.
 
 ---
 
-## 5. Important Constraints & Guidelines
+## 4. Key UI/UX Decisions
 
-* **Subject-Level Scope:** Do not introduce enterprise bloat (e.g., user authentication, databases, Docker containers, cloud services).
-* **No Fabricated Data:** Never generate or display hardcoded prediction results or fabricated accuracy scores.
-* **Consistency:** Maintain exact parity between training preprocessing (TF-IDF vocabulary, feature indices) and backend inference routines.
-* **Safe Analysis:** User-entered URLs must remain static inspection targets and must never be automatically visited or resolved by the client.
+* **Theme:** Dark charcoal (`#080D10` / `#0D1519`) and teal (`#20C8C3` / `#52DDD6`) palette.
+* **Motion Framework:** Hardware-accelerated CSS keyframes and transitions with full `@media (prefers-reduced-motion: reduce)` accessibility overrides.
+* **Sample Testing Bar:** Collections of 10+ synthetic phishing emails and 10+ legitimate emails with non-repeating random selection on consecutive clicks.
+* **Scanning State:** Active card scanline radar sweep (`@keyframes scanlineSweep`) and button spinner active strictly while API requests are pending.
+* **State Management:** Form submission resets previous results immediately (`resultContainer.innerHTML = ''`), and input clear resets all fields and character counters.
 
 ---
 
-## 6. Current Implementation Status
+## 5. Verified Implementation Checklist
 
-* **Project Structure & Environment:** `Completed`
-* **Frontend UI & Controllers:** `Completed` (Full responsive pages for Home, Email Scanner, and URL Scanner).
-* **Backend Routing & Server:** `Completed` (`GET /`, `GET /api/health`, `POST /api/scan-email`, `POST /api/analyze-email`, `POST /api/analyze-url`).
-* **Documentation Suite:** `Completed` (Located in `docs/`).
-* **Email ML Model:** `Completed` (`models/email_phishing_model.joblib` loaded and verified).
-* **Live Email Inference Integration in Flask:** `Completed` (`/api/scan-email` active with live probability calculation).
-* **URL ML Model Training:** `Not Started / In Progress` (Pending separate URL model integration).
-* **URL Model Inference Integration:** `Pending` (Scheduled separately).
+- [x] Standard project directory structure (`datasets/`, `notebooks/`, `models/`, `backend/`, `frontend/`, `docs/`)
+- [x] Email dataset (`datasets/phishing_email.csv`) and URL dataset (`datasets/Training Dataset.arff`)
+- [x] Trained email model pipeline exported to `models/email_phishing_model.joblib`
+- [x] Flask backend (`backend/app.py`) serving static files and live REST APIs
+- [x] Health check endpoint (`GET /api/health`) and email scan route (`POST /api/scan-email`)
+- [x] Verified class index extraction and probability calculation in Flask
+- [x] Responsive frontend with homepage, email scanner, and URL scanner
+- [x] 10+ synthetic phishing and 10+ legitimate sample email library with random picker
+- [x] Slim 8px animated progress bar for Phishing Risk
+- [x] Diagnostic scripts (`backend/test_model.py`, `backend/test_api_endpoints.py`)
+- [ ] Raw URL feature extraction pipeline and Random Forest model export for `/api/analyze-url`

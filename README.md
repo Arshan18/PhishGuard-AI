@@ -10,12 +10,12 @@
 
 ## 📚 Project Documentation Suite
 
-- [Product Requirements Document (PRD)](PRD.md) — Objectives, user profiles, and functional scope.
-- [System Architecture](ARCHITECTURE.md) — Full-stack system design, ML pipelines, and API schemas.
-- [UI/UX Design Specification](DESIGN.md) — Dark charcoal and teal design system, animations, and components.
-- [Project Tasks & Tracker](TASKS.md) — Implementation progress across all project phases.
-- [Project Rules & Guidelines](RULES.md) — Coding conventions, ML evaluation rules, and integrity standards.
-- [Project Memory & Context](MEMORY.md) — Architectural decisions, model lineage, and current state.
+- [Product Requirements Document (PRD)](docs/PRD.md) — Objectives, user profiles, and functional scope.
+- [System Architecture](docs/ARCHITECTURE.md) — Full-stack system design, ML pipelines, and API schemas.
+- [UI/UX Design Specification](docs/DESIGN.md) — Dark charcoal and teal design system, animations, and components.
+- [Project Tasks & Tracker](docs/TASKS.md) — Implementation progress across all project phases.
+- [Project Rules & Guidelines](docs/RULES.md) — Coding conventions, ML evaluation rules, and integrity standards.
+- [Project Memory & Context](docs/MEMORY.md) — Architectural decisions, model lineage, and current state.
 
 ---
 

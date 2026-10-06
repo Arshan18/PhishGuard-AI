@@ -1,30 +1,40 @@
-# UI/UX Design Specification
+# UI/UX Design Specification — PhishGuard AI
 
 ## 1. Visual Theme & Aesthetics
 
-PhishGuard AI employs a modern cybersecurity aesthetic designed to look professional, polished, and accessible for an academic presentation without enterprise dashboard clutter.
+PhishGuard AI employs a dark charcoal and teal cybersecurity aesthetic designed to look professional, modern, and accessible for academic and technical presentations.
 
 ### 1.1. Color Palette
 
-* **Background Primary:** `#070b14` (Deep Dark Navy)
-* **Background Secondary / Panels:** `#0d1424` / `rgba(15, 23, 42, 0.75)` (Glassmorphism Card Surface)
-* **Accent Cyan:** `#06b6d4` / `#22d3ee` (Primary Brand & Glow Highlights)
-* **Accent Blue:** `#3b82f6` / `#60a5fa` (Secondary Accents & Badges)
-* **Safe / Verified Status:** `#10b981` (Emerald Green)
-* **Threat / Phishing Status:** `#ef4444` (Crimson Red)
-* **Warning Status:** `#f59e0b` (Amber Yellow)
-* **Typography Colors:** `#f8fafc` (Headings/Body), `#94a3b8` (Muted/Subtext), `#64748b` (Dim labels)
+* **Background Primary:** `#080D10` (Deep Dark Charcoal)
+* **Background Secondary / Panels:** `#0D1519` / `#111D22` (Card and panel surface)
+* **Input Background:** `#0B1318` / `#0E181D` (Focused state)
+* **Accent Cyan / Teal:** `#20C8C3` / `#52DDD6` (Primary interactive elements, glowing highlights, and brand tokens)
+* **Accent Glow:** `rgba(32, 200, 195, 0.2)`
+* **Safe Status:** `#43D6A0` (Emerald Green)
+* **Threat / Phishing Status:** `#FF727A` (Crimson Red)
+* **Warning Status:** `#F2C66D` (Amber Yellow)
+* **Typography:** `#EDF4F5` (Headings/Body), `#9BAEB3` (Muted/Subtext), `#5E7A80` (Dim labels)
+* **Borders:** `#24363B` / `rgba(32, 200, 195, 0.35)`
 
 ### 1.2. Typography
 
-* **Primary Interface Font:** `Plus Jakarta Sans` (Google Fonts) — clean, modern sans-serif with excellent legibility.
-* **Monospace / Code Font:** `JetBrains Mono` / `Fira Code` — used for technical feature tags, terminal previews, and URL inspection strings.
+* **Primary Interface Font:** `Plus Jakarta Sans` (Google Fonts) — clean, modern sans-serif with high readability.
+* **Monospace / Code Font:** `JetBrains Mono` / Consolas — used for technical tags, threat monitor previews, and code snippets.
 
-### 1.3. UI Components & Effects
+### 1.3. Motion & Micro-Interactions Framework
 
-* **Glassmorphism:** Translucent panel backdrops (`backdrop-filter: blur(12px)`) with subtle 1px border strokes (`rgba(255, 255, 255, 0.08)`).
-* **Micro-interactions:** Smooth hover elevation (`translateY(-2px)`) and soft radial background orbs for depth.
-* **Badges:** Pill-shaped status indicators with soft background fills.
+* **Easing Tokens:**
+  * `--ease-out-expo`: `cubic-bezier(0.16, 1, 0.3, 1)`
+  * `--ease-smooth`: `cubic-bezier(0.2, 0.8, 0.2, 1)`
+  * `--ease-in-out`: `cubic-bezier(0.4, 0, 0.2, 1)`
+* **Entrance Animations:** Staggered upward slide and fade-in (`.fade-slide-up`, `.delay-1` through `.delay-5`) completing in 650ms.
+* **Ambient Background Effect:** Slowly drifting teal ambient glow (`.glow-orb` with `@keyframes ambientDrift` over 20–26s).
+* **Card Interactions:** Hover elevation (`translateY(-4px)`), teal border transition (`rgba(32, 200, 195, 0.4)`), ambient glow (`box-shadow`), and icon scaling (`.card-icon-wrap`).
+* **Tactile Buttons:** Hover elevation and brightened teal glow, active press scaling (`scale(0.97)`), and focus-visible rings.
+* **Live Scanning State:** Active card scanline radar sweep (`@keyframes scanlineSweep`), button spinner, and status text ("Analyzing email..." / "Inspecting URL...").
+* **Result Reveal:** Smooth upward fade-in with a 650ms animated progress bar fill from 0% to the exact returned model percentage.
+* **Accessibility:** Full `@media (prefers-reduced-motion: reduce)` support disabling non-essential transitions and transforms.
 
 ---
 
@@ -33,61 +43,54 @@ PhishGuard AI employs a modern cybersecurity aesthetic designed to look professi
 ### 2.1. Homepage (`index.html`)
 
 * **Navigation Bar:**
-  * Brand shield icon with "PhishGuard AI" logo text.
+  * Brand shield icon with "PhishGuard AI" logo.
   * Links: Home, Email Scanner, URL Scanner, About.
-  * Responsive hamburger toggle for mobile devices.
+  * Responsive mobile hamburger toggle.
 * **Hero Section:**
   * Badge: `Explainable Machine Learning`.
   * Headline: *"Stay One Step Ahead of Phishing."*
-  * Supporting copy explaining dual email & URL ML capabilities.
-  * Action buttons: *"Scan an Email"* (Primary) and *"Check a URL"* (Secondary).
-  * Live Threat Monitor terminal card displaying architectural pipeline highlights.
-* **Feature Cards:**
-  * Two interactive cards highlighting Email Phishing Detection and Malicious URL Detection.
-  * Each card links directly to its respective scanner module.
-* **How It Works Section:**
+  * Supporting copy explaining email and URL ML capabilities.
+  * Action buttons: *"Scan an Email"* (Primary teal) and *"Check a URL"* (Secondary outline).
+  * Quick highlights: Dual-Model ML, Explainable AI, <150ms inference latency.
+  * Live Threat Monitor terminal card displaying real-time ML vectorization simulation.
+* **Core Capabilities Section:**
+  * Dual interactive cards for Email Phishing Detection and Malicious URL Detection with hover lift and primary action buttons.
+* **Workflow Section (`#about`):**
   * 3 numbered steps: *1. Input Submission*, *2. Machine Learning Analysis*, *3. Explainable Verdict*.
-* **Technology Section:**
-  * 6 technical cards showcasing Python, Scikit-learn, TF-IDF, Logistic Regression, Random Forest, and Flask.
 * **Footer:**
-  * Branding, quick navigation links, and college project academic disclaimer.
+  * Brand logo, description, and copyright attribution.
 
 ### 2.2. Email Scanner (`email.html`)
 
-* **Header:** Breadcrumbs, page title, and concise usage guidance.
-* **Sample Test Bar:** One-click sample loader buttons (*"Load Phishing Sample"*, *"Load Legitimate Sample"*) for rapid live demonstration.
+* **Header & Breadcrumbs:** Page title and instructions.
+* **Quick Test Samples Bar:**
+  * *"Load Phishing Sample"*: Randomly selects one of 10+ synthetic phishing emails (non-consecutive selection).
+  * *"Load Legitimate Sample"*: Randomly selects one of 10+ synthetic everyday emails.
 * **Input Form:**
-  * Subject line input (Optional).
-  * Email body textarea with real-time character count.
-  * Action buttons: *"Analyze Email"* (Primary) and *"Clear"* (Secondary).
-* **Loading State:** Centered animated spinner displaying *"Running TF-IDF tokenization and classification model inference..."*.
-* **Notification / Error Banner:** Dynamic alerts for empty input, short text warnings, and backend connection guidance.
-* **Result Section:**
-  * Status badge (*Phishing Detected* or *Legitimate Email*).
-  * Model confidence progress bar.
-  * Explainable AI summary highlighting detected indicators.
+  * Optional Subject Line input.
+  * Email Body textarea with live character counter.
+  * Action buttons: *"Analyze Email"* (Primary) and *"Clear"* (Outline).
+* **Scanning State:** Active scanner card radar sweep, disabled inputs to prevent double submission, spinner, and status message.
+* **Result Card:**
+  * Classification verdict header with status badge (*High Phishing Threat* / *Verified Legitimate*).
+  * Single slim (8px) **Phishing Risk** indicator with external percentage.
+  * Explainable AI summary paragraph.
   * Actionable safety recommendations list.
 
 ### 2.3. Malicious URL Scanner (`url.html`)
 
-* **Header:** Breadcrumbs, title, and URL inspection instructions.
-* **Sample Test Bar:** Quick-load sample buttons (*"Load Malicious Sample"*, *"Load Safe Sample"*).
+* **Header & Breadcrumbs:** Title and usage guidance.
+* **Quick Test Samples Bar:** Buttons to load malicious or safe test URLs.
 * **Input Form:**
-  * Web address / IP text input with URL link icon prefix.
-  * Safety reminder note explicitly clarifying that target URLs are analyzed as static strings and never automatically executed or visited.
+  * Target URL/IP text input with validation.
+  * Static inspection assurance note (URLs are evaluated as text strings and never executed or resolved).
   * Action buttons: *"Check URL"* and *"Clear"*.
-* **Loading State:** Animated spinner displaying *"Extracting Lexical Features..."*.
 * **Result Section:**
-  * Status badge (*Malicious / Phishing URL* or *Legitimate / Safe URL*).
-  * Static target URL display box.
-  * Model confidence progress bar.
-  * Explainable feature summary and structured safety recommendations.
+  * Status badge, static reference box, model confidence bar, and recommendations list.
 
 ---
 
-## 3. UX Guidelines
+## 3. Responsive Behavior
 
-* **Immediate Feedback:** Clear visual state changes upon submission, clearing, or errors.
-* **No Unnecessary Clutter:** Focused solely on scanning tasks without confusing navigation layers or extraneous metrics.
-* **Accessibility:** High contrast text on dark backgrounds, clearly distinguishable buttons, and standard HTML5 form controls.
-* **Safe Exploration:** Explicit assurances and sandboxed static string handling for malicious inputs.
+* **Mobile (<768px):** Collapsed navigation menu, single-column feature cards, full-width buttons, and touch-friendly padding.
+* **Desktop ($\ge$768px):** Multi-column grid, card hover elevation effects, and side-by-side button groupings.
