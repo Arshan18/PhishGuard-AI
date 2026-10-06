@@ -121,7 +121,3 @@ The frontend communicates with Flask endpoints defined in `backend/app.py`:
 > **Note on Model Connection:**  
 > When you train your models in `notebooks/`, export the trained pipeline (`.pkl` / `.joblib`) to the `models/` directory and import them into `backend/app.py` to yield live probabilities and explanations.
 
----
-
-## 🎓 Academic Disclaimer
-This project is built for academic and research presentation purposes to demonstrate explainable AI and machine learning techniques in cybersecurity.
