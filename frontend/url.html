@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Malicious URL Scanner — PhishGuard AI</title>
+  <meta name="description" content="Check suspicious links and domains for malicious phishing patterns using explainable ML feature models.">
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Bootstrap 5 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  
+  <!-- Custom Cyber Stylesheet -->
+  <link rel="stylesheet" href="style.css?v=9">
+</head>
+<body>
+
+  <!-- Background Orbs -->
+  <div class="glow-orb glow-orb-cyan"></div>
+  <div class="glow-orb glow-orb-blue"></div>
+
+  <!-- Navigation Bar -->
+  <header>
+    <nav class="cyber-navbar navbar navbar-expand-lg">
+      <div class="container">
+        <a class="cyber-brand" href="index.html">
+          <span class="brand-icon">
+            <i class="bi bi-shield-lock-fill"></i>
+          </span>
+          <span>PhishGuard <span class="text-cyan">AI</span></span>
+        </a>
+
+        <button class="navbar-toggler border-0 text-white" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+          <i class="bi bi-list fs-2"></i>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarContent">
+          <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-lg-center gap-lg-2">
+            <li class="nav-item">
+              <a class="cyber-nav-link" href="index.html"><i class="bi bi-house-door"></i> Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="cyber-nav-link" href="email.html"><i class="bi bi-envelope-check"></i> Email Scanner</a>
+            </li>
+            <li class="nav-item">
+              <a class="cyber-nav-link active" href="url.html"><i class="bi bi-link-45deg"></i> URL Scanner</a>
+            </li>
+            <li class="nav-item">
+              <a class="cyber-nav-link" href="index.html#about"><i class="bi bi-info-circle"></i> About</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <main class="py-5">
+    <div class="container py-3">
+      <!-- Breadcrumb & Header -->
+      <div class="row justify-content-center mb-4 fade-slide-up delay-1">
+        <div class="col-lg-10">
+          <div class="d-flex align-items-center gap-2 mb-2">
+            <a href="index.html" class="text-muted-custom text-decoration-none small">Home</a>
+            <span class="text-dim small">/</span>
+            <span class="text-cyan small fw-semibold">Malicious URL Scanner</span>
+          </div>
+          <h1 class="h2 fw-bold text-white mb-2">
+            <i class="bi bi-globe2 text-cyan me-2"></i>Malicious URL Scanner
+          </h1>
+          <p class="text-muted-custom mb-0">
+            Inspect website addresses, domain syntax, and lexical markers for phishing, brand impersonation, and deceptive redirection techniques.
+          </p>
+        </div>
+      </div>
+
+      <!-- Main Scanner Card -->
+      <div class="row justify-content-center fade-slide-up delay-2">
+        <div class="col-lg-10">
+          <div class="cyber-card p-4 p-md-5 mb-4" id="urlScannerCard">
+            
+            <!-- Quick Demo Sample Bar -->
+            <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 pb-3 mb-4 border-bottom border-secondary border-opacity-25">
+              <span class="small text-muted-custom fw-semibold">
+                <i class="bi bi-lightning-charge text-warning me-1"></i>Quick Test Samples:
+              </span>
+              <div class="d-flex flex-wrap gap-2">
+                <button type="button" class="sample-btn" id="sampleMaliciousBtn">
+                  <i class="bi bi-exclamation-octagon text-danger me-1"></i>Load Malicious Sample
+                </button>
+                <button type="button" class="sample-btn" id="sampleSafeUrlBtn">
+                  <i class="bi bi-shield-check text-success me-1"></i>Load Safe Sample
+                </button>
+              </div>
+            </div>
+
+            <!-- Form -->
+            <form id="urlScanForm" novalidate>
+              <div class="cyber-input-group mb-4">
+                <label for="urlInput">
+                  <span>Target Website URL or IP Address <span class="text-danger">*</span></span>
+                  <span class="text-dim small">e.g., https://example.com/path</span>
+                </label>
+                <div class="input-group">
+                  <span class="input-group-text cyber-control border-end-0 text-muted-custom">
+                    <i class="bi bi-link-45deg"></i>
+                  </span>
+                  <input 
+                    type="text" 
+                    class="form-control cyber-control border-start-0" 
+                    id="urlInput" 
+                    placeholder="https://example.com/account/login"
+                    required
+                  >
+                </div>
+                <div class="form-text text-dim small mt-2">
+                  <i class="bi bi-shield-shaded text-cyan me-1"></i>Safe Inspection: URLs are analyzed as static strings and will never be automatically visited or executed.
+                </div>
+              </div>
+
+              <!-- Buttons Bar -->
+              <div class="d-flex flex-wrap gap-3 align-items-center justify-content-between">
+                <div class="d-flex gap-2">
+                  <button type="submit" class="btn-cyber-primary" id="analyzeBtn">
+                    <i class="bi bi-shield-check"></i> Check URL
+                  </button>
+                  <button type="button" class="btn-cyber-outline" id="clearBtn">
+                    <i class="bi bi-arrow-counterclockwise"></i> Clear
+                  </button>
+                </div>
+                <div class="small text-dim">
+                  <i class="bi bi-cpu text-cyan me-1"></i>Lexical &amp; Heuristic Feature Analysis
+                </div>
+              </div>
+            </form>
+          </div>
+
+          <!-- Notification / Alert Container -->
+          <div id="alertContainer" style="display: none;"></div>
+
+          <!-- Loading State Indicator -->
+          <div id="loadingIndicator" class="cyber-card p-4 text-center my-4" style="display: none; justify-content: center; align-items: center; flex-direction: column;">
+            <div class="spinner-border text-cyan mb-3" style="width: 3rem; height: 3rem;" role="status"></div>
+            <h5 class="fw-bold text-white mb-1">Extracting Lexical Features</h5>
+            <p class="text-muted-custom small mb-0">Computing domain entropy, length metrics, and classification score...</p>
+          </div>
+
+          <!-- Detection Result Section -->
+          <div id="resultContainer" class="result-container"></div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="cyber-footer mt-auto">
+    <div class="container">
+      <div class="row g-4 align-items-center justify-content-between">
+        <div class="col-md-6">
+          <div class="cyber-brand mb-2">
+            <span class="brand-icon" style="width: 28px; height: 28px; font-size: 0.95rem;">
+              <i class="bi bi-shield-lock-fill"></i>
+            </span>
+            <span class="h5 mb-0 fw-bold">PhishGuard <span class="text-cyan">AI</span></span>
+          </div>
+          <p class="text-muted-custom mb-0 small" style="max-width: 480px;">
+            AI-Based Phishing Email and Malicious URL Detection Using Explainable Machine Learning.
+          </p>
+        </div>
+        <div class="col-md-6 text-md-end">
+          <div class="d-flex flex-wrap gap-3 justify-content-md-end">
+            <a href="index.html" class="text-muted-custom text-decoration-none small hover-white">Home</a>
+            <span class="text-dim">•</span>
+            <a href="email.html" class="text-muted-custom text-decoration-none small hover-white">Email Scanner</a>
+            <span class="text-dim">•</span>
+            <a href="url.html" class="text-muted-custom text-decoration-none small hover-white">URL Scanner</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Bootstrap JS Bundle -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Custom JS -->
+  <script src="script.js?v=8"></script>
+</body>
+</html>

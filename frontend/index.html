@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PhishGuard AI — Phishing Email &amp; Malicious URL Detection</title>
+  <meta name="description"
+    content="AI-Based Phishing Email and Malicious URL Detection Using Explainable Machine Learning.">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet">
+
+  <!-- Bootstrap 5 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+  <!-- Custom Cyber Stylesheet -->
+  <link rel="stylesheet" href="style.css?v=9">
+</head>
+
+<body>
+
+  <!-- Background Orbs -->
+  <div class="glow-orb glow-orb-cyan"></div>
+  <div class="glow-orb glow-orb-blue"></div>
+
+  <!-- Navigation Bar -->
+  <header>
+    <nav class="cyber-navbar navbar navbar-expand-lg">
+      <div class="container">
+        <a class="cyber-brand" href="index.html">
+          <span class="brand-icon">
+            <i class="bi bi-shield-lock-fill"></i>
+          </span>
+          <span>PhishGuard <span class="text-cyan">AI</span></span>
+        </a>
+
+        <button class="navbar-toggler border-0 text-white" type="button" data-bs-toggle="collapse"
+          data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false"
+          aria-label="Toggle navigation">
+          <i class="bi bi-list fs-2"></i>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarContent">
+          <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-lg-center gap-lg-2">
+            <li class="nav-item">
+              <a class="cyber-nav-link active" href="index.html"><i class="bi bi-house-door"></i> Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="cyber-nav-link" href="email.html"><i class="bi bi-envelope-check"></i> Email Scanner</a>
+            </li>
+            <li class="nav-item">
+              <a class="cyber-nav-link" href="url.html"><i class="bi bi-link-45deg"></i> URL Scanner</a>
+            </li>
+            <li class="nav-item">
+              <a class="cyber-nav-link" href="#about"><i class="bi bi-info-circle"></i> About</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <!-- Hero Section -->
+    <section class="py-5 py-lg-6">
+      <div class="container py-4">
+        <div class="row align-items-center g-5">
+          <div class="col-lg-7">
+            <div class="mb-3 fade-slide-up delay-1">
+              <span class="cyber-badge cyber-badge-cyan">
+                <i class="bi bi-cpu-fill"></i> Explainable Machine Learning
+              </span>
+            </div>
+            <h1 class="display-4 fw-extrabold mb-3 fade-slide-up delay-2">
+              Stay One Step Ahead of <span class="gradient-text">Phishing.</span>
+            </h1>
+            <p class="lead text-muted-custom mb-4 fade-slide-up delay-3" style="font-size: 1.15rem; line-height: 1.7;">
+              An intelligent cybersecurity defense platform that identifies potentially malicious emails and fraudulent
+              URLs in real time using advanced Natural Language Processing and lexical machine learning models.
+            </p>
+            <div class="d-flex flex-wrap gap-3 fade-slide-up delay-4">
+              <a href="email.html" class="btn-cyber-primary text-decoration-none">
+                <i class="bi bi-envelope-fill"></i> Scan an Email
+              </a>
+              <a href="url.html" class="btn-cyber-secondary text-decoration-none">
+                <i class="bi bi-globe2"></i> Check a URL
+              </a>
+            </div>
+
+            <!-- Quick stats / Highlights -->
+            <div class="row mt-5 pt-3 border-top border-secondary border-opacity-25 g-4 fade-slide-up delay-5">
+              <div class="col-sm-4">
+                <div class="small text-muted-custom text-uppercase fw-semibold">Detection Engine</div>
+                <div class="h5 fw-bold text-white mb-0">Dual-Model ML</div>
+              </div>
+              <div class="col-sm-4">
+                <div class="small text-muted-custom text-uppercase fw-semibold">Interpretability</div>
+                <div class="h5 fw-bold text-cyan mb-0">Explainable AI</div>
+              </div>
+              <div class="col-sm-4">
+                <div class="small text-muted-custom text-uppercase fw-semibold">Inference Latency</div>
+                <div class="h5 fw-bold text-white mb-0">&lt; 150ms</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Hero Graphic Card -->
+          <div class="col-lg-5 fade-slide-up delay-3">
+            <div class="cyber-card p-4 p-md-5">
+              <div class="d-flex align-items-center justify-content-between mb-4">
+                <div class="d-flex align-items-center gap-2">
+                  <span class="brand-icon"
+                    style="width: 28px; height: 28px; font-size: 0.9rem; background: linear-gradient(135deg, var(--accent-cyan), #1a9e9a);">
+                    <i class="bi bi-shield-check"></i>
+                  </span>
+                  <span class="small fw-bold text-white">Live Threat Monitor</span>
+                </div>
+                <span
+                  class="badge bg-success bg-opacity-25 text-success border border-success border-opacity-50 px-2 py-1">
+                  System Active
+                </span>
+              </div>
+
+              <!-- Terminal-style preview box -->
+              <div class="rounded-3 p-3 mb-3 code-font"
+                style="background: rgba(8, 13, 16, 0.85); border: 1px solid var(--border-glass);">
+                <div class="text-dim small mb-2">// Analyzing incoming attack vector...</div>
+                <div class="text-cyan small mb-1"><span class="text-muted-custom">$</span>
+                  vectorizer.fit_transform(email_tokens)</div>
+                <div class="text-warning small mb-1"><span class="text-muted-custom">&gt;</span> Urgency heuristic
+                  weight: 0.89</div>
+                <div class="text-danger small mb-1"><span class="text-muted-custom">&gt;</span> Domain anomaly detected:
+                  True</div>
+                <div class="text-success small"><span class="text-muted-custom">&gt;</span> Status: Threat Isolated
+                </div>
+              </div>
+
+              <div class="d-flex align-items-center justify-content-between small text-muted-custom pt-2">
+                <span><i class="bi bi-shield-shaded text-cyan me-1"></i> Multi-layer Protection</span>
+                <span>TF-IDF + Random Forest</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Detection Feature Cards Section -->
+    <section class="py-5" style="background: var(--bg-secondary);">
+      <div class="container py-3">
+        <div class="text-center max-w-700 mx-auto mb-5 fade-slide-up delay-2">
+          <span class="cyber-badge cyber-badge-blue mb-2">Core Capabilities</span>
+          <h2 class="fw-bold">Intelligent Detection Modules</h2>
+          <p class="text-muted-custom">Select a scanner module below to inspect suspicious communication channels.</p>
+        </div>
+
+        <div class="row g-4 justify-content-center">
+          <!-- Card 1: Email Phishing -->
+          <div class="col-md-6 col-lg-5 fade-slide-up delay-3">
+            <div class="cyber-card cyber-card-hover p-4 h-100 d-flex flex-column justify-content-between">
+              <div>
+                <div class="d-inline-flex p-3 rounded-3 mb-3 card-icon-wrap"
+                  style="background: rgba(32, 200, 195, 0.1); color: var(--accent-cyan-light); font-size: 1.75rem;">
+                  <i class="bi bi-envelope-exclamation-fill"></i>
+                </div>
+                <h3 class="h4 fw-bold text-white mb-2">Email Phishing Detection</h3>
+                <p class="text-muted-custom mb-4" style="line-height: 1.6;">
+                  Analyzes email subject lines and body text using NLP tokenization to flag deceptive linguistic
+                  patterns, artificial urgency, and social engineering attempts.
+                </p>
+              </div>
+              <div>
+                <a href="email.html" class="btn-cyber-primary w-100 text-decoration-none">
+                  <i class="bi bi-search"></i> Analyze Email
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 2: Malicious URL Detection -->
+          <div class="col-md-6 col-lg-5 fade-slide-up delay-4">
+            <div class="cyber-card cyber-card-hover p-4 h-100 d-flex flex-column justify-content-between">
+              <div>
+                <div class="d-inline-flex p-3 rounded-3 mb-3 card-icon-wrap"
+                  style="background: rgba(32, 200, 195, 0.1); color: var(--accent-cyan-light); font-size: 1.75rem;">
+                  <i class="bi bi-globe-americas"></i>
+                </div>
+                <h3 class="h4 fw-bold text-white mb-2">Malicious URL Detection</h3>
+                <p class="text-muted-custom mb-4" style="line-height: 1.6;">
+                  Inspects target URLs for domain typosquatting, abnormal length, IP address obfuscation, non-standard
+                  port allocations, and subdomain entropy.
+                </p>
+              </div>
+              <div>
+                <a href="url.html" class="btn-cyber-primary w-100 text-decoration-none">
+                  <i class="bi bi-shield-check"></i> Check URL
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section class="py-5" id="about">
+      <div class="container py-4">
+        <div class="text-center mb-5">
+          <span class="cyber-badge cyber-badge-cyan mb-2">Workflow</span>
+          <h2 class="fw-bold">How It Works</h2>
+          <p class="text-muted-custom">Three streamlined steps from raw input to explainable risk assessment.</p>
+        </div>
+
+        <div class="row g-4">
+          <div class="col-md-4">
+            <div class="step-card">
+              <div class="step-number">1</div>
+              <h4 class="h5 fw-bold text-white mb-2">Input Submission</h4>
+              <p class="text-muted-custom mb-0" style="font-size: 0.95rem;">
+                Paste suspicious email headers and body text or enter any web address directly into the secure scanner.
+              </p>
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <div class="step-card">
+              <div class="step-number">2</div>
+              <h4 class="h5 fw-bold text-white mb-2">Machine Learning Analysis</h4>
+              <p class="text-muted-custom mb-0" style="font-size: 0.95rem;">
+                Extracted lexical and TF-IDF features are evaluated by trained classification algorithms in real time.
+              </p>
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <div class="step-card">
+              <div class="step-number">3</div>
+              <h4 class="h5 fw-bold text-white mb-2">Explainable Verdict</h4>
+              <p class="text-muted-custom mb-0" style="font-size: 0.95rem;">
+                Receive an immediate classification badge, confidence score, transparent reasoning breakdown, and safety
+                tips.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="cyber-footer">
+    <div class="container">
+      <div class="row g-4 align-items-center justify-content-between">
+        <div class="col-md-6">
+          <div class="cyber-brand mb-2">
+            <span class="brand-icon" style="width: 28px; height: 28px; font-size: 0.95rem;">
+              <i class="bi bi-shield-lock-fill"></i>
+            </span>
+            <span class="h5 mb-0 fw-bold">PhishGuard <span class="text-cyan">AI</span></span>
+          </div>
+          <p class="text-muted-custom mb-0 small" style="max-width: 480px;">
+            AI-Based Phishing Email and Malicious URL Detection Using Explainable Machine Learning.
+          </p>
+        </div>
+        <div class="col-md-6 text-md-end">
+          <div class="d-flex flex-wrap gap-3 justify-content-md-end">
+            <a href="index.html" class="text-muted-custom text-decoration-none small hover-white">Home</a>
+            <span class="text-dim">•</span>
+            <a href="email.html" class="text-muted-custom text-decoration-none small hover-white">Email Scanner</a>
+            <span class="text-dim">•</span>
+            <a href="url.html" class="text-muted-custom text-decoration-none small hover-white">URL Scanner</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Bootstrap JS Bundle -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Custom JS -->
+  <script src="script.js?v=8"></script>
+</body>
+
+</html>
