@@ -1,18 +1,24 @@
 """
-Backend API for AI-Based Phishing Email Detection (PhishGuard AI)
-Connects frontend inference requests to the trained scikit-learn Pipeline model.
+Backend API for AI-Based Phishing Detection (PhishGuard AI)
+Connects frontend inference requests to:
+1. Email Phishing Model: scikit-learn Pipeline (TF-IDF + Classifier)
+2. Malicious URL Model: TensorFlow/Keras Neural Network + StandardScaler (30 UCI features)
 """
 
+import os
+import joblib
+import numpy as np
+import pandas as pd
 from flask import Flask, request, jsonify
+
 try:
     from flask_cors import CORS
     HAS_CORS = True
 except ImportError:
     HAS_CORS = False
 
-import os
-import joblib
-import numpy as np
+from tensorflow.keras.models import load_model
+from url_features import extract_url_features, extract_features_df, validate_url, FEATURE_NAMES
 
 app = Flask(__name__, static_folder="../frontend", static_url_path="")
 if HAS_CORS:
@@ -28,18 +34,34 @@ else:
 # Configuration & Paths
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 MODELS_DIR = os.path.join(BASE_DIR, "..", "models")
-MODEL_PATH = os.path.join(MODELS_DIR, "email_phishing_model.joblib")
+EMAIL_MODEL_PATH = os.path.join(MODELS_DIR, "email_phishing_model.joblib")
+URL_MODEL_PATH = os.path.join(MODELS_DIR, "url_phishing_model.keras")
+URL_SCALER_PATH = os.path.join(MODELS_DIR, "url_scaler.joblib")
 
-# Load Trained Email Model Pipeline on startup
+# 1. Load Trained Email Model Pipeline on startup
 email_model = None
-if os.path.exists(MODEL_PATH):
+if os.path.exists(EMAIL_MODEL_PATH):
     try:
-        email_model = joblib.load(MODEL_PATH)
-        print(f"[SUCCESS] Loaded email phishing model from: {MODEL_PATH}")
+        email_model = joblib.load(EMAIL_MODEL_PATH)
+        print(f"[SUCCESS] Loaded email phishing model from: {EMAIL_MODEL_PATH}")
     except Exception as e:
-        print(f"[ERROR] Failed to load model from {MODEL_PATH}: {e}")
+        print(f"[ERROR] Failed to load email model from {EMAIL_MODEL_PATH}: {e}")
 else:
-    print(f"[WARNING] Model file not found at: {MODEL_PATH}")
+    print(f"[WARNING] Email model file not found at: {EMAIL_MODEL_PATH}")
+
+# 2. Load Trained URL Neural Network Model & Scaler on startup
+url_model = None
+url_scaler = None
+if os.path.exists(URL_MODEL_PATH) and os.path.exists(URL_SCALER_PATH):
+    try:
+        url_scaler = joblib.load(URL_SCALER_PATH)
+        url_model = load_model(URL_MODEL_PATH)
+        print(f"[SUCCESS] Loaded URL scaler from: {URL_SCALER_PATH}")
+        print(f"[SUCCESS] Loaded URL phishing Keras model from: {URL_MODEL_PATH}")
+    except Exception as e:
+        print(f"[ERROR] Failed to load URL model/scaler: {e}")
+else:
+    print(f"[WARNING] URL model or scaler file not found at: {URL_MODEL_PATH} / {URL_SCALER_PATH}")
 
 
 @app.route("/")
@@ -55,6 +77,7 @@ def health_check():
         "status": "online",
         "service": "PhishGuard AI Backend",
         "email_model_loaded": email_model is not None,
+        "url_model_loaded": (url_model is not None and url_scaler is not None),
         "version": "1.0.0"
     }), 200
 
@@ -69,10 +92,9 @@ def scan_email():
     global email_model
 
     if email_model is None:
-        # Attempt to reload if not loaded on startup
-        if os.path.exists(MODEL_PATH):
+        if os.path.exists(EMAIL_MODEL_PATH):
             try:
-                email_model = joblib.load(MODEL_PATH)
+                email_model = joblib.load(EMAIL_MODEL_PATH)
             except Exception as e:
                 return jsonify({
                     "error": "Trained email model failed to load on server.",
@@ -131,8 +153,8 @@ def scan_email():
                 "phishing": round(prob_phish, 4)
             }
 
-            # Requirement 9: Temporary debug log (sanitized, no sensitive email text exposed)
-            print(f"[AUDIT DEBUG] Classes: {classes_list} | Pred: {raw_pred} ({'Phishing/Spam' if is_phishing_pred else 'Legitimate'}) | P(Legit)={prob_legit:.4f} | P(Phish)={prob_phish:.4f} | ModelConfidence={model_confidence_decimal:.4f} | PhishingRisk={phishing_risk_decimal:.4f}")
+            # Development audit debug log
+            print(f"[EMAIL AUDIT] Classes: {classes_list} | Pred: {raw_pred} ({'Phishing/Spam' if is_phishing_pred else 'Legitimate'}) | P(Legit)={prob_legit:.4f} | P(Phish)={prob_phish:.4f} | Confidence={confidence_pct}%")
 
         # Label mapping: 1 = Phishing/Spam, 0 = Legitimate
         is_phishing = int(raw_pred) == 1
@@ -176,18 +198,133 @@ def scan_email():
 
     except Exception as e:
         return jsonify({
-            "error": "An error occurred during model inference.",
+            "error": "An error occurred during email model inference.",
             "details": str(e)
         }), 500
 
 
+@app.route("/api/scan-url", methods=["POST"])
 @app.route("/api/analyze-url", methods=["POST"])
-def analyze_url():
-    """Placeholder for URL Analysis (to be integrated separately)"""
-    return jsonify({
-        "status": "pending",
-        "message": "URL model integration is scheduled separately."
-    }), 200
+def scan_url():
+    """
+    Endpoint for Malicious URL Phishing Analysis using trained Keras Neural Network and StandardScaler.
+    Expected JSON: { "url": "https://example.com" }
+    """
+    global url_model, url_scaler
+
+    if url_model is None or url_scaler is None:
+        if os.path.exists(URL_MODEL_PATH) and os.path.exists(URL_SCALER_PATH):
+            try:
+                url_scaler = joblib.load(URL_SCALER_PATH)
+                url_model = load_model(URL_MODEL_PATH)
+            except Exception as e:
+                return jsonify({
+                    "error": "Trained URL model failed to load on server.",
+                    "details": str(e),
+                    "success": False
+                }), 500
+        else:
+            return jsonify({
+                "error": "Trained URL model files ('models/url_phishing_model.keras', 'models/url_scaler.joblib') were not found on server.",
+                "success": False
+            }), 503
+
+    data = request.get_json(silent=True) or {}
+    raw_url = data.get("url") or data.get("url_string") or data.get("link") or data.get("target_url") or ""
+
+    # 1. URL Validation
+    is_valid, err_msg = validate_url(raw_url)
+    if not is_valid:
+        return jsonify({
+            "error": err_msg,
+            "success": False
+        }), 400
+
+    trimmed_url = raw_url.strip()
+
+    try:
+        # 2. Extract 30 features according to UCI Phishing specification
+        feature_dict = extract_url_features(trimmed_url)
+        features_df = extract_features_df(trimmed_url)
+
+        if features_df.shape[1] != 30:
+            return jsonify({
+                "error": f"Invalid feature extraction count: expected 30 features, got {features_df.shape[1]}.",
+                "success": False
+            }), 500
+
+        # 3. Scaler transformation
+        scaled_features = url_scaler.transform(features_df)
+
+        # 4. Keras model inference (Output: 0 = Legitimate, 1 = Phishing)
+        raw_pred = url_model.predict(scaled_features, verbose=0)
+        phishing_probability = float(raw_pred[0][0])
+        phishing_probability = max(0.0, min(1.0, phishing_probability))
+
+        is_phishing = phishing_probability >= 0.5
+        prediction_label = "Phishing" if is_phishing else "Legitimate"
+
+        risk_percentage = round(phishing_probability * 100, 2)
+        model_confidence_decimal = round(phishing_probability if is_phishing else (1.0 - phishing_probability), 4)
+        confidence_pct = round(model_confidence_decimal * 100, 2)
+
+        # Development debug logging (Part 11)
+        raw_feat_vals = [int(v) for v in features_df.values[0]]
+        scaled_feat_vals = [round(float(v), 3) for v in scaled_features[0]]
+        print(f"\n[URL DEBUG] URL: {trimmed_url}")
+        print(f"  Extracted features ({len(raw_feat_vals)}): {raw_feat_vals}")
+        print(f"  Scaled features ({len(scaled_feat_vals)}): {scaled_feat_vals}")
+        print(f"  Raw model probability: {phishing_probability:.6f}")
+        print(f"  Final prediction: {prediction_label.lower()}")
+        print(f"  Phishing percentage: {risk_percentage:.2f}%\n")
+
+        # Explainability & Recommendations
+        if is_phishing:
+            explanation = (
+                f"The deep learning neural network model classified this URL as Phishing with a {risk_percentage}% phishing risk score. "
+                "The website address exhibits suspicious markers such as multiple subdomains, non-standard TLD, brand impersonation keywords, or lack of trusted SSL certificates."
+            )
+            recommendations = [
+                "Do not open, visit, or submit credentials on this destination.",
+                "Verify the official root domain directly via authoritative search engines.",
+                "Inspect domain registration details and check for look-alike typo-squatting.",
+                "Add this URL to organizational threat intelligence blocklists."
+            ]
+        else:
+            explanation = (
+                f"The deep learning neural network model classified this URL as Legitimate with a {risk_percentage}% phishing risk score ({confidence_pct}% model confidence). "
+                "The lexical composition, domain syntax, and authority signals correspond with standard authentic web destinations."
+            )
+            recommendations = [
+                "The website structure conforms to standard legitimate domain patterns.",
+                "Always verify active HTTPS encryption before entering sensitive information."
+            ]
+
+        return jsonify({
+            "success": True,
+            "status": "success",
+            "url": trimmed_url,
+            "prediction": prediction_label,
+            "is_phishing": is_phishing,
+            "phishing_probability": round(phishing_probability, 4),
+            "phishing_percentage": risk_percentage,
+            "risk_percentage": risk_percentage,
+            "phishing_risk": round(phishing_probability, 4),
+            "model_confidence": model_confidence_decimal,
+            "confidence": risk_percentage,
+            "model_confidence_pct": confidence_pct,
+            "explanation": explanation,
+            "recommendations": recommendations,
+            "features": feature_dict,
+            "feature_count": 30
+        }), 200
+
+    except Exception as e:
+        return jsonify({
+            "error": "An error occurred during URL model inference.",
+            "details": str(e),
+            "success": False
+        }), 500
 
 
 if __name__ == "__main__":

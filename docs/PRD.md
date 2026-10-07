@@ -1,79 +1,73 @@
 # Product Requirements Document (PRD) — PhishGuard AI
 
-## 1. Project Overview
+## 1. Project Overview & Context
 
-* **Project Name:** AI-Based Phishing Email and Malicious URL Detection Using Explainable Machine Learning (PhishGuard AI)
-* **Project Type:** Subject-level IT Engineering Academic Project
-* **Problem Statement:** Phishing attacks and fraudulent web links represent primary vectors for credential theft, malware distribution, and social engineering fraud. Conventional rule-based filters struggle with dynamic phrasing, while complex deep learning models lack transparency for non-expert users.
-* **Project Purpose:** To deliver a clean, interactive, and transparent web-based cybersecurity tool that evaluates emails and URLs using machine learning pipelines, providing clear risk probabilities and actionable explanations.
-* **Target Audience:** College students, evaluators, IT administrators, and end-users seeking an accessible security assessment tool.
-* **Scope Disclaimer:** PhishGuard AI is developed as an academic and research project for demonstration and educational purposes. It is not an enterprise email gateway or antivirus replacement.
-
----
-
-## 2. Project Objectives
-
-1. **Email Threat Detection:** Accurately classify email body and subject text as *Phishing/Spam* or *Legitimate* using machine learning.
-2. **Transparent Probability Scoring:** Provide a single, unambiguous **Phishing Risk** percentage representing the model's computed probability for the phishing class.
-3. **Malicious URL Detection Interface:** Provide an interactive interface to inspect website addresses for structural and lexical threat indicators.
-4. **Explainable Assessment:** Generate plain-language explanations and safety recommendations tailored to the classification verdict.
-5. **Modern User Experience:** Provide a responsive, high-performance cybersecurity dashboard interface with smooth animations and multi-sample testing tools.
+* **Project Title:** PhishGuard AI – AI-Based Phishing Email & Malicious URL Detection
+* **Academic Course:** Artificial Intelligence and Machine Learning - II
+* **Department:** DEPARTMENT OF INFORMATION TECHNOLOGY
+* **Institution:** M. H. Saboo Siddik College of Engineering, Byculla, Mumbai
+* **Team Members:**
+  * **Asim Khan** — Roll No. 231407
+  * **Arshan Attar** — Roll No. 231408
+* **Head of Department (HOD):** **Dr. Zainab Mirza**
+* **Project Type:** Final-Year Undergraduate Engineering Academic Project & Laboratory Demonstration Prototype
 
 ---
 
-## 3. System Architecture & Machine Learning Pipelines
+## 2. Problem Statement & Motivation
 
-### 3.1. Email Detection Pipeline (Operational)
+Phishing emails and deceptive web links remain the primary initial attack vectors for identity theft, credential harvesting, malware distribution, and financial fraud. 
 
-```text
-Raw Email Text (Subject + Body)
-              ↓
-Text Preprocessing & Tokenization
-              ↓
-TF-IDF Vectorization (30,000 features, sublinear TF, n-grams 1-2)
-              ↓
-Logistic Regression Classifier (Balanced Class Weights)
-              ↓
-Binary Prediction + Phishing Risk Probability + Explainable Recommendations
-```
+Traditional rule-based keyword filters and static blocklists often fail against emerging social engineering lures and dynamically generated domain names. Conversely, complex black-box detection systems do not provide clear risk interpretation to end users.
 
-### 3.2. URL Detection Pipeline (In Progress)
+**PhishGuard AI** addresses this challenge by providing an accessible, transparent, and responsive web platform that analyzes both email content and target URLs using dedicated machine learning models, presenting clear risk probabilities and actionable safety guidance.
 
-```text
-Target URL String
-              ↓
-Lexical & Structural Feature Extraction (30 attributes)
-              ↓
-Feature Normalization
-              ↓
-Random Forest Classifier (datasets/Training Dataset.arff)
-              ↓
-Risk Classification + Recommendation Checklist
-```
+---
+
+## 3. Project Objectives
+
+1. **Dual-Vector Threat Detection:** Provide separate scanning interfaces for evaluating (a) email text content and (b) target URLs.
+2. **Transparent Machine Learning Inference:** Utilize classical machine learning (TF-IDF + Logistic Regression) for linguistic email analysis and deep learning (Dense Neural Network) for multi-feature URL evaluation.
+3. **Calibrated Risk Scoring:** Calculate and display a single, unambiguous **Phishing Risk** percentage ($0.00\%$ to $100.00\%$) indicating threat likelihood.
+4. **Explainable AI Summaries:** Deliver dynamic natural-language explanations and safety recommendations tailored to the specific detection outcome.
+5. **Interactive Demonstration Tools:** Include pre-configured synthetic sample loaders for both malicious and legitimate examples to facilitate academic evaluation.
+6. **Local Scan History Tracking:** Persist recent scan results locally in the user's browser for session auditing without external database overhead.
 
 ---
 
 ## 4. Functional Requirements
 
-* **FR-1: Email Text Input:** Support user input for an optional subject line and email body text.
-* **FR-2: Dynamic Sample Loaders:** Provide quick test buttons with random non-consecutive selection from 10+ synthetic phishing emails and 10+ legitimate emails.
-* **FR-3: Input Validation:** Enforce minimum 15-character threshold and prevent empty submissions.
-* **FR-4: Real-Time Scanning State:** Display animated card radar sweep and button spinner strictly while API inference is active.
-* **FR-5: Live Model Inference:** Flask backend processes raw text through the loaded scikit-learn Pipeline (`models/email_phishing_model.joblib`).
-* **FR-6: Phishing Risk Progress Bar:** Animate a slim 8px risk indicator representing the exact percentage returned by the backend.
-* **FR-7: Explainable Verdict:** Provide contextual summaries and safety checklists based on model outputs.
-* **FR-8: Malicious URL Scanner Interface:** Accept URL/IP targets, enforce syntax validation, and present static threat reviews.
-* **FR-9: Disconnected Server Graceful Handling:** Display user-friendly banners and startup instructions when Flask is offline.
+| ID | Module | Description | Implementation Status |
+| :--- | :--- | :--- | :--- |
+| **FR-1** | **Email Scanner** | Accepts subject line and body text, validates input length ($\ge$ 15 chars), and displays word/character counts. | **Completed & Live** |
+| **FR-2** | **Email Multi-Sample Loader** | Provides 10+ synthetic phishing emails and 10+ legitimate emails with non-consecutive random selection. | **Completed & Live** |
+| **FR-3** | **Email ML Inference** | Evaluates text via `TfidfVectorizer` + `LogisticRegression` (`models/email_phishing_model.joblib`) and returns exact class probabilities. | **Completed & Live** |
+| **FR-4** | **URL Scanner** | Validates URL format and evaluates structural/lexical indicators via static string parsing. | **Completed & Live** |
+| **FR-5** | **URL Multi-Sample Loader** | Provides 15+ synthetic phishing URLs and 15+ legitimate URLs with automated scan demonstration flow. | **Completed & Live** |
+| **FR-6** | **URL Neural Network Inference** | Extracts 30 features (`backend/url_features.py`), scales values with `StandardScaler`, and evaluates via Keras Dense Neural Network (`models/url_phishing_model.keras`). | **Completed & Live** |
+| **FR-7** | **Phishing Risk Progress Bar** | Smoothly animates a slim calibrated progress bar reflecting the exact probability returned by the backend. | **Completed & Live** |
+| **FR-8** | **Explainability & Tips** | Presents contextual summaries ("Why This Was Detected") and actionable safety checklists. | **Completed & Live** |
+| **FR-9** | **Scan History Logger** | Records recent scans (Type, Target, Verdict, Risk Score, Timestamp) in `localStorage` with view and clear controls (`frontend/history.html`). | **Completed & Live** |
+| **FR-10** | **Live Threat Dashboard** | Displays real-time session counters (Total Scans, Phishing Detected, Safe Items, Avg Risk) on the homepage. | **Completed & Live** |
+| **FR-11** | **Offline Handling** | Displays graceful warning banners when the Flask backend server is disconnected or unreachable. | **Completed & Live** |
 
 ---
 
-## 5. Out of Scope
+## 5. Non-Functional Requirements
 
-The following elements are excluded to preserve a realistic subject-level academic scope:
+* **Performance & Latency:** Model inference response times under 200ms on standard local hardware.
+* **Safety & Isolation:** Target URLs are evaluated purely as inert text strings and are never fetched, resolved, or executed.
+* **Responsive Design:** Fluid layout across desktop and mobile screens using Bootstrap 5 and custom CSS.
+* **Accessibility:** Full support for `@media (prefers-reduced-motion: reduce)` disabling non-essential UI animations.
+* **Maintainability:** Modular separation between backend inference, feature extraction, and frontend static assets.
 
-* User authentication, user logins, or persistent database storage
-* Commercial payment integration or subscription models
-* Real-time network packet sniffing or IMAP/SMTP mail server listeners
-* Browser extensions or deep system kernel hooks
-* Automatic navigation or active crawling of malicious URLs (sandboxed static string analysis only)
-* Enterprise multi-tenant administration consoles
+---
+
+## 6. Scope Boundaries & Exclusions
+
+To maintain a practical and achievable academic scope, the following capabilities are explicitly excluded:
+
+* Active automated web crawling or live DOM rendering of external malicious sites.
+* Live mail server integration (IMAP/SMTP listeners) or commercial enterprise security gateways.
+* User account registration, passwords, or cloud database storage.
+* Paid third-party commercial threat intelligence API dependencies.

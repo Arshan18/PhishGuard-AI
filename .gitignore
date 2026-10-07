@@ -33,11 +33,7 @@ ENV/
 # Jupyter Notebook checkpoints
 .ipynb_checkpoints
 
-# Trained Model Binaries (large files)
-models/*.pkl
-models/*.joblib
-models/*.h5
-
 # OS generated files
 .DS_Store
 Thumbs.db
+

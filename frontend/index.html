@@ -22,7 +22,7 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
   <!-- Custom Cyber Stylesheet -->
-  <link rel="stylesheet" href="style.css?v=9">
+  <link rel="stylesheet" href="style.css?v=11">
 </head>
 
 <body>
@@ -60,6 +60,12 @@
               <a class="cyber-nav-link" href="url.html"><i class="bi bi-link-45deg"></i> URL Scanner</a>
             </li>
             <li class="nav-item">
+              <a class="cyber-nav-link" href="history.html"><i class="bi bi-clock-history"></i> Scan History</a>
+            </li>
+            <li class="nav-item">
+              <a class="cyber-nav-link" href="#tips"><i class="bi bi-lightbulb"></i> Security Tips</a>
+            </li>
+            <li class="nav-item">
               <a class="cyber-nav-link" href="#about"><i class="bi bi-info-circle"></i> About</a>
             </li>
           </ul>
@@ -93,6 +99,9 @@
               <a href="url.html" class="btn-cyber-secondary text-decoration-none">
                 <i class="bi bi-globe2"></i> Check a URL
               </a>
+              <a href="history.html" class="btn-cyber-outline text-decoration-none">
+                <i class="bi bi-clock-history"></i> View History
+              </a>
             </div>
 
             <!-- Quick stats / Highlights -->
@@ -112,7 +121,7 @@
             </div>
           </div>
 
-          <!-- Hero Graphic Card -->
+          <!-- Hero Graphic Card / Latest Threat Card -->
           <div class="col-lg-5 fade-slide-up delay-3">
             <div class="cyber-card p-4 p-md-5">
               <div class="d-flex align-items-center justify-content-between mb-4">
@@ -121,7 +130,7 @@
                     style="width: 28px; height: 28px; font-size: 0.9rem; background: linear-gradient(135deg, var(--accent-cyan), #1a9e9a);">
                     <i class="bi bi-shield-check"></i>
                   </span>
-                  <span class="small fw-bold text-white">Live Threat Monitor</span>
+                  <span class="small fw-bold text-white">Latest Scan Monitor</span>
                 </div>
                 <span
                   class="badge bg-success bg-opacity-25 text-success border border-success border-opacity-50 px-2 py-1">
@@ -129,23 +138,64 @@
                 </span>
               </div>
 
-              <!-- Terminal-style preview box -->
-              <div class="rounded-3 p-3 mb-3 code-font"
-                style="background: rgba(8, 13, 16, 0.85); border: 1px solid var(--border-glass);">
-                <div class="text-dim small mb-2">// Analyzing incoming attack vector...</div>
-                <div class="text-cyan small mb-1"><span class="text-muted-custom">$</span>
-                  vectorizer.fit_transform(email_tokens)</div>
-                <div class="text-warning small mb-1"><span class="text-muted-custom">&gt;</span> Urgency heuristic
-                  weight: 0.89</div>
-                <div class="text-danger small mb-1"><span class="text-muted-custom">&gt;</span> Domain anomaly detected:
-                  True</div>
-                <div class="text-success small"><span class="text-muted-custom">&gt;</span> Status: Threat Isolated
+              <!-- Live Dynamic Latest Detection Card on Hero -->
+              <div id="heroLatestScanBox">
+                <!-- Dynamically populated via script.js -->
+                <div class="rounded-3 p-3 mb-3 code-font"
+                  style="background: rgba(8, 13, 16, 0.85); border: 1px solid var(--border-glass);">
+                  <div class="text-dim small mb-2">// System ready for inspection...</div>
+                  <div class="text-cyan small mb-1"><span class="text-muted-custom">$</span> phishguard.engine.ready()</div>
+                  <div class="text-muted-custom small mb-1">&gt; Email Pipeline: Active (TF-IDF + Random Forest)</div>
+                  <div class="text-muted-custom small">&gt; URL Neural Network: Active (30 UCI Features)</div>
                 </div>
               </div>
 
               <div class="d-flex align-items-center justify-content-between small text-muted-custom pt-2">
                 <span><i class="bi bi-shield-shaded text-cyan me-1"></i> Multi-layer Protection</span>
-                <span>TF-IDF + Random Forest</span>
+                <a href="history.html" class="text-cyan text-decoration-none">History Log &rarr;</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Live Dashboard Statistics Section -->
+    <section class="py-4" style="background: rgba(13, 21, 25, 0.7); border-top: 1px solid var(--border-glass); border-bottom: 1px solid var(--border-glass);">
+      <div class="container">
+        <div class="row align-items-center g-4 justify-content-between">
+          <div class="col-lg-3">
+            <div class="d-flex align-items-center gap-2 mb-1">
+              <i class="bi bi-activity text-cyan fs-5"></i>
+              <h5 class="fw-bold text-white mb-0">Dashboard Stats</h5>
+            </div>
+            <p class="text-muted-custom small mb-0">Live aggregated metrics from actual scan sessions.</p>
+          </div>
+          <div class="col-lg-9">
+            <div class="row g-3 text-center">
+              <div class="col-6 col-md-3">
+                <div class="p-3 rounded-3" style="background: var(--bg-card); border: 1px solid var(--border-glass);">
+                  <div class="small text-muted-custom text-uppercase fw-semibold mb-1">Total Scans</div>
+                  <div class="h3 fw-bold text-white mb-0" id="dashTotalScans">0</div>
+                </div>
+              </div>
+              <div class="col-6 col-md-3">
+                <div class="p-3 rounded-3" style="background: var(--bg-card); border: 1px solid var(--border-glass);">
+                  <div class="small text-muted-custom text-uppercase fw-semibold mb-1">Phishing Detected</div>
+                  <div class="h3 fw-bold text-danger mb-0" id="dashPhishScans">0</div>
+                </div>
+              </div>
+              <div class="col-6 col-md-3">
+                <div class="p-3 rounded-3" style="background: var(--bg-card); border: 1px solid var(--border-glass);">
+                  <div class="small text-muted-custom text-uppercase fw-semibold mb-1">Legitimate Scanned</div>
+                  <div class="h3 fw-bold text-success mb-0" id="dashLegitScans">0</div>
+                </div>
+              </div>
+              <div class="col-6 col-md-3">
+                <div class="p-3 rounded-3" style="background: var(--bg-card); border: 1px solid var(--border-glass);">
+                  <div class="small text-muted-custom text-uppercase fw-semibold mb-1">Average Risk</div>
+                  <div class="h3 fw-bold text-cyan mb-0" id="dashAvgRisk">0.0%</div>
+                </div>
               </div>
             </div>
           </div>
@@ -210,8 +260,69 @@
       </div>
     </section>
 
+    <!-- Security Tips Section -->
+    <section class="py-5" id="tips">
+      <div class="container py-3">
+        <div class="text-center max-w-700 mx-auto mb-5">
+          <span class="cyber-badge cyber-badge-cyan mb-2">Defense Knowledge</span>
+          <h2 class="fw-bold">Essential Phishing Security Tips</h2>
+          <p class="text-muted-custom">Key protective practices to recognize and avoid modern social engineering schemes.</p>
+        </div>
+
+        <div class="row g-4">
+          <div class="col-md-6 col-lg-3">
+            <div class="tip-card">
+              <div class="tip-icon-wrap">
+                <i class="bi bi-globe2"></i>
+              </div>
+              <h5 class="fw-bold text-white mb-2">Verify Root Domains</h5>
+              <p class="text-muted-custom small mb-0" style="line-height: 1.6;">
+                Always inspect the exact root domain before entering credentials. Attackers frequently use look-alike hyphens and deceptive subdomains to spoof legitimate services.
+              </p>
+            </div>
+          </div>
+
+          <div class="col-md-6 col-lg-3">
+            <div class="tip-card">
+              <div class="tip-icon-wrap">
+                <i class="bi bi-hourglass-split"></i>
+              </div>
+              <h5 class="fw-bold text-white mb-2">Beware Artificial Urgency</h5>
+              <p class="text-muted-custom small mb-0" style="line-height: 1.6;">
+                Phishing emails manufacture false urgency (e.g., "Account suspended within 24h") to rush you into making unverified security decisions.
+              </p>
+            </div>
+          </div>
+
+          <div class="col-md-6 col-lg-3">
+            <div class="tip-card">
+              <div class="tip-icon-wrap">
+                <i class="bi bi-link-45deg"></i>
+              </div>
+              <h5 class="fw-bold text-white mb-2">Inspect Shortened Links</h5>
+              <p class="text-muted-custom small mb-0" style="line-height: 1.6;">
+                Shortened URLs (such as bit.ly or tinyurl) mask the true destination. Always run shortened links through an inspection scanner before visiting.
+              </p>
+            </div>
+          </div>
+
+          <div class="col-md-6 col-lg-3">
+            <div class="tip-card">
+              <div class="tip-icon-wrap">
+                <i class="bi bi-key-fill"></i>
+              </div>
+              <h5 class="fw-bold text-white mb-2">Never Share Passwords</h5>
+              <p class="text-muted-custom small mb-0" style="line-height: 1.6;">
+                Authentic organizations and IT helpdesks will never request passwords, verification codes, or banking PINs via email or unsolicited web forms.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- How It Works Section -->
-    <section class="py-5" id="about">
+    <section class="py-5" id="about" style="background: var(--bg-secondary);">
       <div class="container py-4">
         <div class="text-center mb-5">
           <span class="cyber-badge cyber-badge-cyan mb-2">Workflow</span>
@@ -277,6 +388,8 @@
             <a href="email.html" class="text-muted-custom text-decoration-none small hover-white">Email Scanner</a>
             <span class="text-dim">•</span>
             <a href="url.html" class="text-muted-custom text-decoration-none small hover-white">URL Scanner</a>
+            <span class="text-dim">•</span>
+            <a href="history.html" class="text-muted-custom text-decoration-none small hover-white">Scan History</a>
           </div>
         </div>
       </div>
@@ -286,7 +399,7 @@
   <!-- Bootstrap JS Bundle -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
   <!-- Custom JS -->
-  <script src="script.js?v=8"></script>
+  <script src="script.js?v=11"></script>
 </body>
 
 </html>
